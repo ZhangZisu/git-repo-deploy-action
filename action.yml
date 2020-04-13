@@ -8,17 +8,24 @@ branding:
   icon: 'git-commit'
   color: 'orange'
 inputs:
-  SRC:
+  src:
+    description: 'The source directory to deploy. Relative to current project root. If not specified, `dist` will be used.'
     required: false
-  DST:
+  dst:
+    description: 'The destination directory. Relative to destination git repo root. If not specified, will directly deploy to repo root.'
     required: false
-  BRANCH:
+  branch:
+    description: 'The target branch of the dest git repo.'
     required: false
-  REPO:
+  repo:
+    description: 'The full url of the dest git repo. HTTPS repos should include credentials. SSH repos should have extra setup.'
     required: true
-  SINGLE_COMMIT:
+  single:
+    description: 'Set true to override existed commits.'
     required: false
-  NAME:
+  name:
+    description: 'Git config name. Default: Github Actions'
     required: false
-  EMAIL:
+  email:
+    description: 'Git config email. Default: noreply@actions.github.com'
     required: false

@@ -8,7 +8,13 @@ export async function main () {
   const local = '/tmp/git-repo-deploy'
   await fs.ensureDir('/tmp')
 
-  await execute(`git clone ${config.repo} -b ${config.branch} --depth 1 ${local}`, '/tmp')
+  if (await execute(`git clone ${config.repo} -b ${config.branch} --depth 1 ${local}`, '/tmp')) {
+    if (await execute(`git clone ${config.repo} --depth 1 ${local}`, '/tmp')) {
+      throw new Error('Bad repo')
+    }
+    await execute(`git checkout --orphan ${config.branch}`, local)
+    await execute('git reset --hard', local)
+  }
 
   await execute(`git config user.name "${config.name}"`, local)
   await execute(`git config user.email "${config.email}"`, local)
@@ -16,7 +22,7 @@ export async function main () {
 
   await execute(`rsync -q -av --progress ${config.src} ${local}${config.dst}`, config.workspace)
 
-  if (config.singleCommit) {
+  if (config.single) {
     await execute(`git checkout --orphan ${config.branch}-temp`, local)
     await execute('git add --all .', local)
     await execute('git commit -m "deploy" --quiet', local)

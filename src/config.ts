@@ -5,7 +5,7 @@ export interface IActionConfig {
   dst: string
   branch: string
   repo: string
-  singleCommit: boolean
+  single: boolean
   workspace: string
   name: string
   email: string
@@ -13,16 +13,16 @@ export interface IActionConfig {
 
 export function getConfig (): IActionConfig {
   const config = {
-    src: getInput('SRC') || 'dist',
-    dst: getInput('DST') || '',
-    branch: getInput('BRANCH') || 'master',
-    repo: getInput('REPO'),
-    singleCommit: getInput('SINGLE_INPUT') === 'true',
+    src: getInput('src') || 'dist',
+    dst: getInput('dst') || '',
+    branch: getInput('branch') || 'master',
+    repo: getInput('repo'),
+    single: getInput('single') === 'true',
     workspace: process.env.GITHUB_WORKSPACE || '',
-    name: getInput('NAME') || 'Github Actions',
-    email: getInput('EMAIL') || 'noreply@actions.github.com'
+    name: getInput('name') || 'Github Actions',
+    email: getInput('email') || 'noreply@actions.github.com'
   }
   if (!config.src.endsWith('/')) config.src += '/'
-  if (config.dst)config.dst = '/' + config.dst
+  if (config.dst) config.dst = '/' + config.dst
   return config
 }
